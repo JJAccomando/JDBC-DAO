@@ -77,30 +77,8 @@ public class MySQLMembersDAO implements MembersDAO {
         member.setLastName(resultSet.getString("last_name"));
         member.setPhoneNum(resultSet.getString("phone_number"));
         member.setEmail(resultSet.getString("email"));
-        member.setDateOfBirth(resultSet.getDate("date_of_birth"));
-        int age = calculateAge(member.getDateOfBirth());
-        member.setAgeGroup(determineAgeGroup(age));
+        member.setDateOfBirth(resultSet.getString("date_of_birth"));
         return member;
-    }
-
-    private int calculateAge(Date date) {
-        LocalDate localDate = date.toLocalDate();
-        LocalDate currentDate = LocalDate.now();
-        return Period.between(localDate, currentDate).getYears();
-    }
-
-    private AgeGroup determineAgeGroup(int age) {
-        if (age < 13) {
-            return AgeGroup.CHILD;
-        } else if (age < 18) {
-            return AgeGroup.YOUTH;
-        } else if (age < 26) {
-            return AgeGroup.YOUNG_ADULT;
-        } else if (age < 65) {
-            return AgeGroup.ADULT;
-        } else {
-            return AgeGroup.SENIOR;
-        }
     }
 
 }
