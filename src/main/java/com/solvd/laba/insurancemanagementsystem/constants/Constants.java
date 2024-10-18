@@ -20,6 +20,8 @@ public class Constants {
 
     public static final String SQL_FIND_BY_EMAIL = "SELECT * FROM members WHERE email = ?;";
 
+    public static final String SQL_FIND_BY_PHONE = "SELECT * FROM members WHERE phone_number = ?;";
+
     public static final int MYSQL = 1;
 
     public static final int ORACLE = 2;

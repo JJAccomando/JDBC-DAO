@@ -9,7 +9,7 @@ public abstract class DAOFactory {
 
     public abstract MembersDAO getMembersDAO() throws DAOException;
 
-    public static DAOFactory getDAOFactory(int factoryType) {
+    public static DAOFactory getDAOFactory(int factoryType) throws IllegalArgumentException {
         switch (factoryType) {
             case MYSQL:
                 return new MySQLDAOFactory();
@@ -18,7 +18,7 @@ public abstract class DAOFactory {
             case POSTGRESQL:
                 return new PostgreSQLDAOFactory();
             default:
-                return null;
+                throw new IllegalArgumentException("Error: Invalid framework.");
         }
     }
 }

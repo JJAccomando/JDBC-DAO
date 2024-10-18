@@ -2,6 +2,7 @@ package com.solvd.laba.insurancemanagementsystem.dao.jdbc;
 
 import com.solvd.laba.insurancemanagementsystem.connection.DBConnection;
 import com.solvd.laba.insurancemanagementsystem.constants.AgeGroup;
+import com.solvd.laba.insurancemanagementsystem.constants.SearchColumn;
 import com.solvd.laba.insurancemanagementsystem.dao.MembersDAO;
 import com.solvd.laba.insurancemanagementsystem.exceptions.DAOException;
 import com.solvd.laba.insurancemanagementsystem.model.Members;
@@ -36,15 +37,16 @@ public class MySQLMembersDAO implements MembersDAO {
     }
 
     @Override
-    public Members findById(Integer id) { return findInt(id); }
+    public Members findByPrimaryKey(Integer id) { return find(SearchColumn.ID, id); }
 
     @Override
-    public Members findByEmail(String email) { return findString(email); }
+    public Members findByUniqueColumn(SearchColumn column, String value) { return find(column, value); }
 
-    private Members findInt(Object... values) throws DAOException {
+    private Members find(SearchColumn column, Object... values) throws DAOException {
         Members member = null;
+        String sql = getSQLQuery(column);
         try (Connection connection = DBConnection.getConnection();
-            PreparedStatement statement = prepareStatement(connection, SQL_FIND_BY_ID, false, values);
+            PreparedStatement statement = prepareStatement(connection, sql, false, values);
             ResultSet resultSet = statement.executeQuery()) {
             if (resultSet.next()) {
                 member = getMembersFromResultSet(resultSet);
@@ -55,18 +57,17 @@ public class MySQLMembersDAO implements MembersDAO {
         return member;
     }
 
-    private Members findString(Object... values) throws DAOException {
-        Members member = null;
-        try (Connection connection = DBConnection.getConnection();
-             PreparedStatement statement = prepareStatement(connection, SQL_FIND_BY_EMAIL, false, values);
-             ResultSet resultSet = statement.executeQuery()) {
-            if (resultSet.next()) {
-                member = getMembersFromResultSet(resultSet);
-            }
-        } catch (SQLException e) {
-            throw new DAOException("Error: Could not retrieve member information.");
+    private String getSQLQuery(SearchColumn column) {
+        switch (column) {
+            case ID:
+                return SQL_FIND_BY_ID;
+            case EMAIL:
+                return SQL_FIND_BY_EMAIL;
+            case PHONE_NUM:
+                return SQL_FIND_BY_PHONE;
+            default:
+                throw new IllegalArgumentException("Invalid search column");
         }
-        return member;
     }
 
     private Members getMembersFromResultSet(ResultSet resultSet) throws SQLException {

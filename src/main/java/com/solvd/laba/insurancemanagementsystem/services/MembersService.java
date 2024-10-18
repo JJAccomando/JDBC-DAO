@@ -1,5 +1,6 @@
 package com.solvd.laba.insurancemanagementsystem.services;
 
+import com.solvd.laba.insurancemanagementsystem.constants.SearchColumn;
 import com.solvd.laba.insurancemanagementsystem.dao.MembersDAO;
 import com.solvd.laba.insurancemanagementsystem.exceptions.DAOException;
 import com.solvd.laba.insurancemanagementsystem.factory.DAOFactory;
@@ -20,11 +21,11 @@ public class MembersService {
     }
 
     public Members getMember(Integer id) throws SQLException {
-        return membersDAO.findById(id);
+        return membersDAO.findByPrimaryKey(id);
     }
 
-    public Members getMember(String email) throws SQLException {
-        return membersDAO.findByEmail(email);
+    public Members getMember(SearchColumn column, String value) throws SQLException {
+        return membersDAO.findByUniqueColumn(column, value);
     }
 
 }

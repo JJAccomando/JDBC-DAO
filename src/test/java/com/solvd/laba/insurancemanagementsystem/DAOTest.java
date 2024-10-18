@@ -1,6 +1,8 @@
 package com.solvd.laba.insurancemanagementsystem;
 
 import com.solvd.laba.insurancemanagementsystem.constants.AgeGroup;
+import com.solvd.laba.insurancemanagementsystem.constants.SearchColumn;
+import com.solvd.laba.insurancemanagementsystem.exceptions.DAOException;
 import com.solvd.laba.insurancemanagementsystem.factory.DAOFactory;
 import com.solvd.laba.insurancemanagementsystem.model.Members;
 import com.solvd.laba.insurancemanagementsystem.services.MembersService;
@@ -56,8 +58,18 @@ public class DAOTest {
         System.out.println("DAOFactory successfully obtained: " + mySQLFactory);
         membersService.createMembers(MEMBER);
         System.out.println("Member successfully created.");
-        checkMembers(membersService.getMember(MEMBER.getId()));
-        checkMembers(membersService.getMember(MEMBER.getEmail()));
+        Members memberById = membersService.getMember(MEMBER.getId());
+        if (memberById == null)
+            throw new AssertionError("Error: Member not found by ID.");
+        checkMembers(memberById);
+        Members memberByEmail = membersService.getMember(SearchColumn.EMAIL, MEMBER.getEmail());
+        if (memberByEmail == null)
+            throw new AssertionError("Error: Member not found by email.");
+        checkMembers(memberByEmail);
+        Members memberByPhone = membersService.getMember(SearchColumn.PHONE_NUM, MEMBER.getPhoneNum());
+        if (memberByPhone == null)
+            throw new AssertionError("Error: Member not found by phone number.");
+        checkMembers(memberByPhone);
     }
 
     private void checkMembers(Members member) {
