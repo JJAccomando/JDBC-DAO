@@ -8,8 +8,8 @@ public interface MembersDAO extends GenericDAO<Members, Integer> {
 
     void create(Members element) throws SQLException;
 
-    Members findById(Integer id);
+    Members findById(Integer id) throws SQLException;
 
-    Members findByEmail(String email);
+    Members findByEmail(String email) throws SQLException;
 
 }

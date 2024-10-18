@@ -19,11 +19,11 @@ public class MembersService {
         membersDAO.create(member);
     }
 
-    public Members getMember(Integer id) {
+    public Members getMember(Integer id) throws SQLException {
         return membersDAO.findById(id);
     }
 
-    public Members getMember(String email) {
+    public Members getMember(String email) throws SQLException {
         return membersDAO.findByEmail(email);
     }
 
