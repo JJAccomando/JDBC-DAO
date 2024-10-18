@@ -57,6 +57,7 @@ public class DAOTest {
         membersService.createMembers(MEMBER);
         System.out.println("Member successfully created.");
         checkMembers(membersService.getMember(MEMBER.getId()));
+        checkMembers(membersService.getMember(MEMBER.getEmail()));
     }
 
     private void checkMembers(Members member) {

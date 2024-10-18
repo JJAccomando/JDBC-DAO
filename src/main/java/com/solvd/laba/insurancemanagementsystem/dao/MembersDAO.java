@@ -10,4 +10,6 @@ public interface MembersDAO extends GenericDAO<Members, Integer> {
 
     Members findById(Integer id);
 
+    Members findByEmail(String email);
+
 }

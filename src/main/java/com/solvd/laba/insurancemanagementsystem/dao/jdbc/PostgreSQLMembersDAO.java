@@ -7,12 +7,13 @@ import java.sql.SQLException;
 
 public class PostgreSQLMembersDAO implements MembersDAO {
     @Override
-    public void create(Members element) throws SQLException {
-
-    }
+    public void create(Members element) throws SQLException {}
 
     @Override
     public Members findById(Integer id) {
         return null;
     }
+
+    @Override
+    public Members findByEmail(String email) { return null; }
 }

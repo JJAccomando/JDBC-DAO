@@ -10,8 +10,7 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.time.Period;
 
-import static com.solvd.laba.insurancemanagementsystem.constants.Constants.SQL_FIND_BY_ID;
-import static com.solvd.laba.insurancemanagementsystem.constants.Constants.SQL_INSERT;
+import static com.solvd.laba.insurancemanagementsystem.constants.Constants.*;
 import static com.solvd.laba.insurancemanagementsystem.utilities.DAOUtilities.prepareStatement;
 
 public class MySQLMembersDAO implements MembersDAO {
@@ -37,13 +36,30 @@ public class MySQLMembersDAO implements MembersDAO {
     }
 
     @Override
-    public Members findById(Integer id) { return find(id); }
+    public Members findById(Integer id) { return findInt(id); }
 
-    private Members find(Object... values) throws DAOException {
+    @Override
+    public Members findByEmail(String email) { return findString(email); }
+
+    private Members findInt(Object... values) throws DAOException {
         Members member = null;
         try (Connection connection = DBConnection.getConnection();
             PreparedStatement statement = prepareStatement(connection, SQL_FIND_BY_ID, false, values);
             ResultSet resultSet = statement.executeQuery()) {
+            if (resultSet.next()) {
+                member = getMembersFromResultSet(resultSet);
+            }
+        } catch (SQLException e) {
+            throw new DAOException("Error: Could not retrieve member information.");
+        }
+        return member;
+    }
+
+    private Members findString(Object... values) throws DAOException {
+        Members member = null;
+        try (Connection connection = DBConnection.getConnection();
+             PreparedStatement statement = prepareStatement(connection, SQL_FIND_BY_EMAIL, false, values);
+             ResultSet resultSet = statement.executeQuery()) {
             if (resultSet.next()) {
                 member = getMembersFromResultSet(resultSet);
             }

@@ -23,4 +23,8 @@ public class MembersService {
         return membersDAO.findById(id);
     }
 
+    public Members getMember(String email) {
+        return membersDAO.findByEmail(email);
+    }
+
 }
